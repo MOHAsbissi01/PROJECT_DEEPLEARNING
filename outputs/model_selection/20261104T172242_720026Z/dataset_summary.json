@@ -1,0 +1,17 @@
+{
+  "n_images": 60,
+  "native_size": "1280x720",
+  "valid_pairs": 60,
+  "errors": 0,
+  "global_anomaly_fraction": 0.09849560546875,
+  "anomaly_fraction_median": 0.06622938368055556,
+  "anomaly_fraction_min": 0.0037467447916666665,
+  "anomaly_fraction_max": 0.4232855902777778,
+  "families": {
+    "animals": 31,
+    "obstacles": 15,
+    "cones": 8,
+    "lost_tires": 3,
+    "vehicle": 3
+  }
+}

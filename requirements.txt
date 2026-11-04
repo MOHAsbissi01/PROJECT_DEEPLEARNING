@@ -1,0 +1,11 @@
+tensorflow>=2.16
+numpy>=1.26
+pandas>=2.0
+pillow>=10.0
+matplotlib>=3.8
+streamlit>=1.40
+ipykernel>=6.29
+# Google Drive access (only needed to download the dataset with the Drive API)
+google-api-python-client>=2.100
+google-auth>=2.23
+google-auth-oauthlib>=1.1

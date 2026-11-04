@@ -1,0 +1,78 @@
+{
+  "status": "fixed_before_test",
+  "selection_dataset": "validation",
+  "selection_metric": "pooled_pixel_f1",
+  "evaluation_resolution": "native_mask_resolution",
+  "probability_resize_method": "bilinear",
+  "threshold_comparison": ">",
+  "zero_division_value": 0.0,
+  "threshold_grid": [
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95
+  ],
+  "primary_model": "transfer",
+  "image_height": 360,
+  "image_width": 640,
+  "validation_names": [
+    "animals02_Zagori_On_the_road_to_Papigko.webp",
+    "animals24_Sheep_Herders_Block_the_Road_Kaleybar_to_Eskanlu.webp",
+    "animals31_deer.webp",
+    "cones04_Federation.webp",
+    "lost_tires03.webp",
+    "lost_tires08.webp",
+    "lost_tires09.webp",
+    "obstacles11_boulder5.webp",
+    "vehicle03_Fuhrwerke_in_China.webp"
+  ],
+  "models": {
+    "baseline": {
+      "checkpoint_relative_path": "outputs/model_selection/20261030T170429_728027Z/models/baseline.keras",
+      "threshold": 0.15,
+      "validation_metrics": {
+        "tp": 461795,
+        "fp": 857314,
+        "fn": 247870,
+        "tn": 6727421,
+        "precision": 0.3500810016458079,
+        "recall": 0.6507225240078065,
+        "f1": 0.4552453846510257,
+        "dice": 0.4552453846510257,
+        "iou": 0.2947040132637387,
+        "threshold": 0.15
+      }
+    },
+    "transfer": {
+      "checkpoint_relative_path": "outputs/model_selection/20261030T170429_728027Z/models/transfer.keras",
+      "threshold": 0.35,
+      "validation_metrics": {
+        "tp": 618513,
+        "fp": 82355,
+        "fn": 91152,
+        "tn": 7502380,
+        "precision": 0.8824957053253966,
+        "recall": 0.8715562976897551,
+        "f1": 0.8769918888817206,
+        "dice": 0.8769918888817206,
+        "iou": 0.7809310370950229,
+        "threshold": 0.35
+      }
+    }
+  }
+}
