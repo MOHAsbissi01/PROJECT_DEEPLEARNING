@@ -1,5 +1,5 @@
 {
-  "model_name": "conv_autoencoder",
+  "model_name": "autoencoder_anomaly_scorer",
   "approach": "autoencoder",
   "seed": 42,
   "image_height": 360,
@@ -145,5 +145,6 @@
     "obstacles11_boulder5.webp": "single::obstacles11_boulder5.webp",
     "vehicle01_man_carrying_dry_grass_on_bicycle.webp": "single::vehicle01_man_carrying_dry_grass_on_bicycle.webp",
     "vehicle03_Fuhrwerke_in_China.webp": "single::vehicle03_Fuhrwerke_in_China.webp"
-  }
+  },
+  "background_error_scale": 0.030546939000487328
 }
