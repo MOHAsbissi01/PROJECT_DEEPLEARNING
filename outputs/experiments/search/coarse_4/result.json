@@ -1,0 +1,23 @@
+{
+  "study": "search",
+  "name": "coarse_4",
+  "optimizer": "adam",
+  "learning_rate": 0.006691310059954055,
+  "batch_size": 8,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 27,
+  "best_epoch": 19,
+  "val_loss": 0.9782438278198242,
+  "final_train_loss": 1.0771876573562622,
+  "train_val_gap": -0.09550273418426514,
+  "threshold": 0.2,
+  "val_precision": 0.33583066981912685,
+  "val_recall": 0.6416816385195832,
+  "val_f1": 0.4409077464014837,
+  "val_iou": 0.28279772757758975,
+  "val_auroc": 0.8653480029346728,
+  "val_ap": 0.380253441386112,
+  "seconds": 124.20422469999903
+}

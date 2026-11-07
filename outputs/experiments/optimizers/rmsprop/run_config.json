@@ -1,0 +1,12 @@
+{
+  "study": "optimizers",
+  "name": "rmsprop",
+  "optimizer": "rmsprop",
+  "learning_rate": 0.001,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "loss": "bce_dice",
+  "seed": 42
+}

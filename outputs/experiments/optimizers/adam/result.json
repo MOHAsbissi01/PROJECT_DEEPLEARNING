@@ -1,0 +1,23 @@
+{
+  "study": "optimizers",
+  "name": "adam",
+  "optimizer": "adam",
+  "learning_rate": 0.001,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 21,
+  "best_epoch": 13,
+  "val_loss": 0.938018262386322,
+  "final_train_loss": 1.0402321815490723,
+  "train_val_gap": -0.06420344114303589,
+  "threshold": 0.2,
+  "val_precision": 0.35305709369439614,
+  "val_recall": 0.6788681983752898,
+  "val_f1": 0.46452826568329725,
+  "val_iou": 0.30253130376901144,
+  "val_auroc": 0.8769826897947484,
+  "val_ap": 0.3968494393086142,
+  "seconds": 85.34252950000518
+}

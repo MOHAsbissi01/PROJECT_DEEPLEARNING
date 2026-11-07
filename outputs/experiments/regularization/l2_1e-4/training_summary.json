@@ -1,0 +1,9 @@
+{
+  "epochs_completed": 19,
+  "best_epoch": 11,
+  "best_validation_loss": 1.0003504753112793,
+  "training_duration_seconds": 76.2403983999975,
+  "devices": [
+    "CPU"
+  ]
+}

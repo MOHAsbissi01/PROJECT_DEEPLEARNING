@@ -1,0 +1,23 @@
+{
+  "study": "regularization",
+  "name": "dropout_0.4",
+  "optimizer": "adam",
+  "learning_rate": 0.001,
+  "batch_size": 4,
+  "dropout": 0.4,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 9,
+  "best_epoch": 1,
+  "val_loss": 1.2675479650497437,
+  "final_train_loss": 1.299214243888855,
+  "train_val_gap": -0.09070193767547607,
+  "threshold": 0.1,
+  "val_precision": 0.09739634656267178,
+  "val_recall": 0.9884424341062332,
+  "val_f1": 0.17732039706696845,
+  "val_iou": 0.09728555516922824,
+  "val_auroc": 0.5557755653299703,
+  "val_ap": 0.09549111717593295,
+  "seconds": 42.555776799999876
+}

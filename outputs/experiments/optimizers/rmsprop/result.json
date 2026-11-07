@@ -1,0 +1,23 @@
+{
+  "study": "optimizers",
+  "name": "rmsprop",
+  "optimizer": "rmsprop",
+  "learning_rate": 0.001,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 22,
+  "best_epoch": 14,
+  "val_loss": 0.9681947231292725,
+  "final_train_loss": 0.9904162883758545,
+  "train_val_gap": -0.11566996574401855,
+  "threshold": 0.2,
+  "val_precision": 0.35504874555747007,
+  "val_recall": 0.5984189723320158,
+  "val_f1": 0.4456740410982624,
+  "val_iou": 0.2867313889637208,
+  "val_auroc": 0.864945973049499,
+  "val_ap": 0.38939943096132607,
+  "seconds": 101.5064857000034
+}

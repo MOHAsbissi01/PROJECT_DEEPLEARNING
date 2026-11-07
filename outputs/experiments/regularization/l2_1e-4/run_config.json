@@ -1,0 +1,12 @@
+{
+  "study": "regularization",
+  "name": "l2_1e-4",
+  "optimizer": "adam",
+  "learning_rate": 0.001,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0001,
+  "batch_norm": false,
+  "loss": "bce_dice",
+  "seed": 42
+}
