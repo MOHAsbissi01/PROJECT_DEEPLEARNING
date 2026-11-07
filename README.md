@@ -24,9 +24,13 @@ roadanomaly/                reusable package
   training.py                 compile / fit / checkpoints / history
   metrics.py                  precision, recall, F1, Dice, IoU, AUROC, AP, FPR@95
   inference.py                experiment loading, prediction, visualisation
+  experiments.py              chapter-3 studies: optimisers, regularisation, random + coarse-to-fine search
   report.py                   technical-report generator
-DEEPLEARING_FINALE.ipynb    original Colab notebook (kept for reference)
-2026…/ technical_report/    outputs of the original Colab run (reused automatically)
+DOCUMENTATION.md            full project documentation + oral-exam Q&A (read this first)
+COMMANDS.txt                the commands to run the project, in order
+DEEPLEARING_FINALE.ipynb    first Colab notebook (kept for history)
+2026…/ technical_report/    outputs of the first Colab run (kept for history)
+outputs/model_selection/20261107T094734_134561Z   FINAL experiment (models, metrics, figures, technical report)
 ```
 
 ## Quick start
@@ -76,12 +80,22 @@ Put this project folder in your Drive (`MyDrive/PROJECT-DEEPLEARNING`, or edit `
 | 1–2 Setup, Drive access | reproducibility |
 | 3 Exploration (integrity, class imbalance, image/mask overlays, near-duplicates) | dataset exploration |
 | 4–5 Grouped split (no near-duplicate leakage), preprocessing, augmentation | data preprocessing |
-| 6–7 CNN, MobileNetV2 U-Net (+ optional fine-tuning), autoencoder; training | model implementation |
+| 6–7 CNN, MobileNetV2 U-Net (+ fine-tuning), autoencoder; training; **7.4 optimiser / regularisation / hyper-parameter studies (course chapter 3)** | model implementation |
 | 8–9 Threshold selection on validation; test: precision, recall, F1, Dice, IoU, AUROC, AP | performance evaluation |
 | 10 Per-family / per-image analysis, error maps, discussion | results analysis |
 | 11 Report generation → `technical_report/technical_report.md` | technical report |
 
-`TRAINING_PLAN` (section 7) decides per model whether to **reuse** the Colab checkpoint (same partitions required, verified automatically) or **train**. By default `baseline` and `transfer` are reused and the autoencoder is trained. Environment switches: `ROADANOMALY_FORCE_TRAIN=1` retrains everything, `ROADANOMALY_QUICK_RUN=1` runs 1 epoch per model (smoke test).
+`TRAINING_PLAN` (section 7) decides per model whether to **train** (default for all three, about 25 min on a laptop CPU) or **reuse** a previous checkpoint (same partitions required, verified automatically). The chapter-3 studies (section 7.4, about 40 min) are cached in `outputs/experiments/`, so a second run skips them. Environment switches: `ROADANOMALY_FORCE_TRAIN=1` retrains everything, `ROADANOMALY_QUICK_RUN=1` runs 1 epoch per model (smoke test), `ROADANOMALY_RUN_STUDIES=0` skips the studies.
+
+## Results (test set, 12 images, thresholds fixed on validation)
+
+| Model | F1 | IoU | AUROC | AP |
+|---|---|---|---|---|
+| baseline CNN (from scratch) | 0.464 | 0.302 | 0.890 | 0.432 |
+| **MobileNetV2 U-Net (transfer)** | **0.747** | **0.596** | **0.952** | **0.817** |
+| autoencoder | 0.202 | 0.112 | 0.663 | 0.241 |
+
+See `DOCUMENTATION.md` for the analysis, the limits (60 images, single seed) and the course mapping (the autoencoder is not a course chapter; it is explained there from first principles).
 
 ## Streamlit interface
 

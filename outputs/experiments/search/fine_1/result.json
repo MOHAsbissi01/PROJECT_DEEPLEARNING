@@ -1,0 +1,23 @@
+{
+  "study": "search",
+  "name": "fine_1",
+  "optimizer": "adam",
+  "learning_rate": 0.0016610736110930964,
+  "batch_size": 8,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 32,
+  "best_epoch": 24,
+  "val_loss": 0.9057419896125793,
+  "final_train_loss": 0.965103268623352,
+  "train_val_gap": -0.04101139307022095,
+  "threshold": 0.25,
+  "val_precision": 0.4109100068049455,
+  "val_recall": 0.655178147435762,
+  "val_f1": 0.5050600289485905,
+  "val_iou": 0.3378463608765344,
+  "val_auroc": 0.8898326004592718,
+  "val_ap": 0.45135130498490555,
+  "seconds": 154.9602780999994
+}

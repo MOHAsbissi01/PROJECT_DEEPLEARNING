@@ -1,0 +1,12 @@
+{
+  "study": "search",
+  "name": "fine_3",
+  "optimizer": "adam",
+  "learning_rate": 0.0009977788434043647,
+  "batch_size": 8,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "loss": "bce_dice",
+  "seed": 42
+}

@@ -50,6 +50,37 @@ PLACEHOLDER_ANALYSIS = (
 PLACEHOLDER_CONCLUSION = "[TO COMPLETE: answer the objective in 4-5 sentences using the numbers above.]"
 
 
+def studies_markdown(experiments_dir: Path, commentary: str = "") -> str | None:
+    """Markdown section with the tables of the chapter-3 studies (optimisers, regularisation, search)."""
+    experiments_dir = Path(experiments_dir)
+    titles = {
+        "optimizers": "Optimisers (SGD, momentum, RMSprop, Adam)",
+        "regularization": "Regularisation (dropout, L2, batch-norm)",
+        "search": "Random search (coarse_*) then finer search (fine_*)",
+    }
+    blocks = []
+    for folder, title in titles.items():
+        rows = [_read(p) for p in sorted((experiments_dir / folder).glob("*/result.json"))]
+        if not rows:
+            continue
+        rows.sort(key=lambda r: -r["val_f1"])
+        table = _table(
+            ["Variant", "Optimiser", "LR", "Batch", "Dropout", "L2", "BN", "Epochs", "Val loss", "Val F1", "Val IoU", "Val AUROC"],
+            [[r["name"], r["optimizer"], f"{r['learning_rate']:.1e}", r["batch_size"], r["dropout"], r["l2"], r["batch_norm"],
+              r["epochs"], _fmt(r["val_loss"], 3), _fmt(r["val_f1"], 3), _fmt(r["val_iou"], 3), _fmt(r["val_auroc"], 3)] for r in rows],
+        )
+        blocks.append(f"**{title}**\n\n{table}")
+    if not blocks:
+        return None
+    intro = (
+        "### 5.1 Chapter-3 studies on the baseline CNN (validation only)\n\n"
+        "Same seed, loss (BCE + Dice), augmentation and early stopping (patience 8, at most 40 epochs); ranked on the "
+        "validation split by pooled F1 at its best threshold. The test set is not used. One seed and 9 validation images: "
+        "two identical Adam runs differ by about 0.02 F1, so smaller differences are noise.\n\n"
+    )
+    return intro + "\n\n".join(blocks) + ("\n\n" + commentary if commentary else "")
+
+
 def write_report(
     selection_path: Path,
     authors: str = "[Group members]",

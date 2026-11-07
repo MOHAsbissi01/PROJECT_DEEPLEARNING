@@ -1,0 +1,17 @@
+{
+  "baseline": {
+    "trainable": 46689,
+    "non_trainable": 0,
+    "total": 46689
+  },
+  "transfer": {
+    "trainable": 2690801,
+    "non_trainable": 643520,
+    "total": 3334321
+  },
+  "autoencoder": {
+    "trainable": 583499,
+    "non_trainable": 3,
+    "total": 583502
+  }
+}
