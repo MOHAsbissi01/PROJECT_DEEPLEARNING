@@ -4,3 +4,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .venv/
+
+# course material and scratch files (not part of the deliverable)
+DEEPLEARNING_class_course/
+outputs/experiments_run.log
+outputs/experiments/**/best_model.keras
+*.log

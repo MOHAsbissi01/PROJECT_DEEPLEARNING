@@ -63,29 +63,58 @@ LOSSES = {"bce": "binary_crossentropy", "bce_dice": bce_dice_loss, "dice": dice_
 # ---------------------------------------------------------------------------
 # 1. Baseline CNN
 # ---------------------------------------------------------------------------
-def build_baseline_cnn(height=config.IMG_HEIGHT, width=config.IMG_WIDTH, base_filters=16, kernel_size=3, pool_size=2):
+def build_baseline_cnn(
+    height=config.IMG_HEIGHT,
+    width=config.IMG_WIDTH,
+    base_filters=16,
+    kernel_size=3,
+    pool_size=2,
+    batch_norm=False,
+    dropout=0.0,
+    l2=0.0,
+):
+    """Small encoder-decoder CNN.
+
+    The three optional arguments implement the regularisation tools of the course (chapter 3):
+    ``batch_norm`` (Conv -> BatchNorm -> ReLU), ``dropout`` (spatial dropout rate applied after every
+    pooling stage and after the bottleneck) and ``l2`` (weight-decay coefficient lambda on the kernels).
+    With the defaults the architecture is exactly the one of the reference experiment.
+    """
     if height % pool_size**2 or width % pool_size**2:
         raise ValueError("Height and width must be divisible by 4.")
+    regularizer = keras.regularizers.l2(l2) if l2 else None
+
+    stack = [layers.Input((height, width, 3), name="rgb_image")]
 
     def conv(filters, name):
-        return layers.Conv2D(filters, kernel_size, padding="same", activation="relu", kernel_initializer="he_normal", name=name)
+        stack.append(
+            layers.Conv2D(
+                filters, kernel_size, padding="same", activation=None if batch_norm else "relu",
+                kernel_initializer="he_normal", kernel_regularizer=regularizer, name=name,
+            )
+        )
+        if batch_norm:
+            stack.append(layers.BatchNormalization(name=f"{name}_bn"))
+            stack.append(layers.ReLU(name=f"{name}_relu"))
 
-    return keras.Sequential(
-        [
-            layers.Input((height, width, 3), name="rgb_image"),
-            conv(base_filters, "encoder_conv_1"),
-            layers.MaxPooling2D(pool_size, name="encoder_pool_1"),
-            conv(base_filters * 2, "encoder_conv_2"),
-            layers.MaxPooling2D(pool_size, name="encoder_pool_2"),
-            conv(base_filters * 4, "bottleneck"),
-            layers.UpSampling2D(pool_size, interpolation="nearest", name="decoder_upsampling_1"),
-            conv(base_filters * 2, "decoder_conv_1"),
-            layers.UpSampling2D(pool_size, interpolation="nearest", name="decoder_upsampling_2"),
-            conv(base_filters, "decoder_conv_2"),
-            layers.Conv2D(1, 1, activation="sigmoid", name="anomaly_probability"),
-        ],
-        name="baseline_segmentation_cnn",
-    )
+    def drop(name):
+        if dropout:
+            stack.append(layers.SpatialDropout2D(dropout, name=name))
+
+    conv(base_filters, "encoder_conv_1")
+    stack.append(layers.MaxPooling2D(pool_size, name="encoder_pool_1"))
+    drop("dropout_1")
+    conv(base_filters * 2, "encoder_conv_2")
+    stack.append(layers.MaxPooling2D(pool_size, name="encoder_pool_2"))
+    drop("dropout_2")
+    conv(base_filters * 4, "bottleneck")
+    drop("dropout_3")
+    stack.append(layers.UpSampling2D(pool_size, interpolation="nearest", name="decoder_upsampling_1"))
+    conv(base_filters * 2, "decoder_conv_1")
+    stack.append(layers.UpSampling2D(pool_size, interpolation="nearest", name="decoder_upsampling_2"))
+    conv(base_filters, "decoder_conv_2")
+    stack.append(layers.Conv2D(1, 1, activation="sigmoid", name="anomaly_probability"))
+    return keras.Sequential(stack, name="baseline_segmentation_cnn")
 
 
 # ---------------------------------------------------------------------------

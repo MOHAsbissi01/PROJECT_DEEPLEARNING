@@ -1,0 +1,8 @@
+cd "C:\Users\sbiss\OneDrive - ESPRIT\Desktop\PROJECT-DEEPLEARNING"
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m ipykernel install --user --name roadanomaly
+python -c "import sys; from nbconvert.nbconvertapp import main; sys.argv=['jupyter-nbconvert','--to','notebook','--execute','--inplace','--ExecutePreprocessor.timeout=-1','RoadAnomaly_Project.ipynb']; main()"
+python -m roadanomaly.experiments --study all
+streamlit run app.py

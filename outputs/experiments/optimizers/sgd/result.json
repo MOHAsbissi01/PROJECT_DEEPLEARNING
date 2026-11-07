@@ -1,0 +1,23 @@
+{
+  "study": "optimizers",
+  "name": "sgd",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 40,
+  "best_epoch": 38,
+  "val_loss": 1.0807853937149048,
+  "final_train_loss": 1.0774985551834106,
+  "train_val_gap": -0.011625409126281738,
+  "threshold": 0.4,
+  "val_precision": 0.33861086644584765,
+  "val_recall": 0.4615431224591885,
+  "val_f1": 0.3906335999446622,
+  "val_iou": 0.24272508729598824,
+  "val_auroc": 0.8377603389583566,
+  "val_ap": 0.3608556037627556,
+  "seconds": 254.31273430000147
+}

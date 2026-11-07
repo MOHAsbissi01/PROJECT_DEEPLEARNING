@@ -42,7 +42,26 @@ def _read(path: Path):
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
 
 
-def write_report(selection_path: Path, authors: str = "[Group members]") -> Path:
+PLACEHOLDER_ANALYSIS = (
+    "[TO COMPLETE after reviewing the figures: compare precision/recall trade-offs, typical false alarms "
+    "(road markings, shadows, vehicles), missed anomalies (small or road-coloured objects), contour quality, "
+    "and the validation-test gap (small sets: 9 and 12 images, so one difficult scene changes the scores).]"
+)
+PLACEHOLDER_CONCLUSION = "[TO COMPLETE: answer the objective in 4-5 sentences using the numbers above.]"
+
+
+def write_report(
+    selection_path: Path,
+    authors: str = "[Group members]",
+    critical_analysis: str | None = None,
+    conclusion: str | None = None,
+    studies_section: str | None = None,
+) -> Path:
+    """Write ``technical_report.md``.
+
+    ``critical_analysis`` / ``conclusion`` are the two human-written sections (placeholders if omitted);
+    ``studies_section`` is an optional Markdown block (course-aligned experiments) inserted after the results.
+    """
     exp = load_experiment(selection_path)
     sel_dir = exp.directory
     payload, test = exp.payload, exp.test_results
@@ -199,11 +218,11 @@ Primary model selected on validation: **{primary}**.{f" Best model on test (F1):
 
 {chr(10).join(figure_md) if figure_md else "_No figures found._"}
 
+{studies_section or ''}
+
 ## 6. Critical analysis
 
-[TO COMPLETE after reviewing the figures: compare precision/recall trade-offs, typical false alarms
-(road markings, shadows, vehicles), missed anomalies (small or road-coloured objects), contour quality,
-and the validation-test gap (small sets: 9 and 12 images, so one difficult scene changes the scores).]
+{critical_analysis or PLACEHOLDER_ANALYSIS}
 
 ## 7. Limitations and future work
 
@@ -216,7 +235,7 @@ and the validation-test gap (small sets: 9 and 12 images, so one difficult scene
 
 ## 8. Conclusion
 
-[TO COMPLETE: answer the objective in 4-5 sentences using the numbers above.]
+{conclusion or PLACEHOLDER_CONCLUSION}
 
 ## References
 

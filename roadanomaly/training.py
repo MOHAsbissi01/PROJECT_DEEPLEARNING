@@ -36,9 +36,26 @@ def _json_default(value):
     raise TypeError(f"Not JSON serialisable: {type(value)}")
 
 
-def compile_segmentation(model, learning_rate=1e-3, loss="bce", monitor_threshold=0.5):
+OPTIMIZERS = ("sgd", "momentum", "rmsprop", "adam")  # the optimisers of course chapter 3
+
+
+def make_optimizer(name: str, learning_rate: float):
+    """SGD, SGD + momentum (beta = 0.9), RMSprop (rho = 0.9) or Adam (beta1 = 0.9, beta2 = 0.999)."""
+    name = name.lower()
+    if name == "sgd":
+        return keras.optimizers.SGD(learning_rate)
+    if name == "momentum":
+        return keras.optimizers.SGD(learning_rate, momentum=0.9)
+    if name == "rmsprop":
+        return keras.optimizers.RMSprop(learning_rate, rho=0.9)
+    if name == "adam":
+        return keras.optimizers.Adam(learning_rate)
+    raise ValueError(f"Unknown optimizer {name!r}; choose one of {OPTIMIZERS}")
+
+
+def compile_segmentation(model, learning_rate=1e-3, loss="bce", monitor_threshold=0.5, optimizer="adam"):
     model.compile(
-        optimizer=keras.optimizers.Adam(learning_rate),
+        optimizer=make_optimizer(optimizer, learning_rate),
         loss=LOSSES[loss],
         metrics=[
             keras.metrics.Precision(name="precision", thresholds=monitor_threshold),

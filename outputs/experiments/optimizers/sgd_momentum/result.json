@@ -1,0 +1,23 @@
+{
+  "study": "optimizers",
+  "name": "sgd_momentum",
+  "optimizer": "momentum",
+  "learning_rate": 0.01,
+  "batch_size": 4,
+  "dropout": 0.0,
+  "l2": 0.0,
+  "batch_norm": false,
+  "epochs": 35,
+  "best_epoch": 27,
+  "val_loss": 0.9556666612625122,
+  "final_train_loss": 1.0952855348587036,
+  "train_val_gap": -0.06205916404724121,
+  "threshold": 0.4,
+  "val_precision": 0.32145573364130586,
+  "val_recall": 0.6271522478916108,
+  "val_f1": 0.4250474165840577,
+  "val_iou": 0.26987950053846377,
+  "val_auroc": 0.8755765574795737,
+  "val_ap": 0.39591537367496066,
+  "seconds": 134.11545879999903
+}
