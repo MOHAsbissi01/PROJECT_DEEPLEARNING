@@ -15,7 +15,9 @@ The dataset stays on **Google Drive**; the code runs in **VS Code**, in **Colab*
 
 ```
 RoadAnomaly_Project.ipynb   main notebook (exploration → report), VS Code / Colab
-app.py                      Streamlit testing interface
+app.py                      Streamlit app: upload an image -> automatic mask + animal alert
+app_advanced.py             Streamlit lab: metrics, thresholds, dataset explorer, all three models
+roadanomaly/alert.py        Alert logic: mask clean-up, objects, pretrained animal classifier
 roadanomaly/                reusable package
   config.py                   paths, protocol, scene groups (env-var overridable)
   drive_data.py               Google Drive access (Drive for Desktop / Drive API / Colab)
@@ -38,7 +40,8 @@ outputs/model_selection/20261107T094734_134561Z   FINAL experiment (models, metr
 ```powershell
 python -m venv .venv ; .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-streamlit run app.py          # test the already-trained models
+streamlit run app.py          # upload an image -> automatic alert (animal on the road)
+streamlit run app_advanced.py # advanced lab
 ```
 
 For the notebook, open `RoadAnomaly_Project.ipynb` in VS Code, pick the `.venv` kernel and *Run All*.
@@ -99,13 +102,16 @@ See `DOCUMENTATION.md` for the analysis, the limits (60 images, single seed) and
 
 ## Streamlit interface
 
-`streamlit run app.py`
+**`streamlit run app.py` - automatic road alert.** The user only uploads an image; model, threshold and mask are handled automatically:
 
-* **Test an image**: pick a dataset image (filter by split/family) or upload your own (optionally with a ground-truth mask); choose models, move the threshold slider live; see score heatmap, predicted mask, error map (TP/FP/FN) and per-image metrics; download masks.
-* **Experiment results**: validation/test tables, threshold curves, per-image and per-family scores, saved figures.
-* **Dataset explorer**: statistics and image/mask inspection.
+1. the segmentation model chosen on validation (transfer-learning U-Net; optionally the course CNN from the sidebar) predicts the anomaly mask with the validation threshold;
+2. small specks are removed and the pixels are grouped into objects;
+3. each object is classified by an ImageNet-pretrained MobileNetV2: animal / possible animal / unknown object;
+4. the page shows a red **animal alert** (with sound), an orange obstacle warning, or a green "road clear" message, the annotated image, the list of objects and an explanation of the decision.
 
-The app discovers every experiment folder (`validation_selection.json` + `models/`) under the project, including the original Colab output, and falls back to upload-only mode if the dataset is not reachable.
+Measured on the 60 dataset images (`roadanomaly/alert.py`): all 6 test animals trigger the animal alert; 25/31 animal images give an animal alert, 3 a "possible animal" alert, 3 only an obstacle warning; about 4 of 29 non-animal images are wrongly called animals (boulders, one hedgehog barrier). The app does not know where the road is.
+
+**`streamlit run app_advanced.py` - lab.** Test an image (dataset or upload, optional ground-truth mask, threshold slider, TP/FP/FN map, metrics), experiment results (tables, threshold curves, per-image and per-family scores) and dataset explorer. Every experiment folder (`validation_selection.json` + `models/`) is discovered automatically.
 
 ## Protocol notes
 

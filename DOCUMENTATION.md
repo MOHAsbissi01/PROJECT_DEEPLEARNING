@@ -57,7 +57,9 @@ barely better than chance at ranking pixels — which is exactly the limitation 
 
 ```
 RoadAnomaly_Project.ipynb   main notebook: exploration → training → evaluation → report (VS Code / Colab)
-app.py                      Streamlit testing interface (upload an image, move the threshold, compare models)
+app.py                      Streamlit app: upload an image -> automatic mask + animal alert
+app_advanced.py             Streamlit lab (threshold slider, metrics, dataset explorer, all three models)
+roadanomaly/alert.py        Alert logic: mask clean-up, objects, pretrained animal classifier
 roadanomaly/                reusable Python package
   config.py                   paths, seed, resolution, scene groups, threshold grid
   drive_data.py               Google Drive access (Drive for Desktop / public link / Colab / OAuth)
@@ -80,7 +82,8 @@ DEEPLEARNING_class_course/  course material (not part of the code)
 ```powershell
 python -m venv .venv ; .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-streamlit run app.py                    # test the trained models (no dataset needed: upload an image)
+streamlit run app.py                    # upload an image -> automatic animal alert (no dataset needed)
+streamlit run app_advanced.py           # advanced lab
 python -m roadanomaly.experiments       # (optional) rerun the chapter-3 studies, about 40 min on CPU (cached results are skipped)
 # notebook: open RoadAnomaly_Project.ipynb, choose the .venv kernel, Run All (about 25 min training + 40 min for the studies on CPU; see COMMANDS.txt)
 ```
@@ -498,14 +501,15 @@ Noise level: two identical Adam runs gave 0.465 and 0.482 → differences < 0.02
 
 41. *How is the project reproducible?* Seed 42 everywhere, deterministic grouped split, saved run configs, thresholds frozen in JSON before the test, the report generated from files on disk, `COMMANDS.txt` with the exact commands. Residual non-determinism (~0.02 F1) comes from multithreaded floating-point operations.
 42. *Where is the data and how is it loaded?* On Google Drive (professor's folder, with a fallback copy); `drive_data.ensure_dataset()` finds a local copy, Drive for Desktop, or downloads into `data/` (git-ignored). Integrity is checked against `frame_list.json` (60 images + 60 masks).
-43. *What does the Streamlit app do?* Four tabs: *Test an image* (dataset image or upload, choose models, threshold slider, score heat-map, predicted mask, TP/FP/FN error map, per-image metrics, download), *Experiment results* (tables, curves, per-image and per-family scores), *Dataset explorer*, *About*. It loads the experiment folder found in `outputs/` (the newest complete one).
+43. *What does the Streamlit app do?* `app.py` is fully automatic: the user uploads a road photo; the validation-selected model predicts the mask with its validation threshold; small specks are removed; each remaining object is cropped and classified by an ImageNet-pretrained MobileNetV2 (classes 0-397 are animals); the page shows a red animal alert with sound, an orange obstacle warning or a green clear message, the annotated image and the list of objects. `app_advanced.py` keeps the lab (dataset or upload, models, threshold slider, TP/FP/FN map, metrics, experiment results, dataset explorer).
+   *Measured reliability (60 dataset images, transfer model):* all 6 test animals trigger the animal alert; over all images 25/31 animal images give an animal alert, 3 a possible-animal alert, 3 only an obstacle warning; about 4 of 29 non-animal images are wrongly called animals (boulders, one hedgehog barrier). The classifier is a ImageNet one (no deer class, no cardboard hedgehog) and the system does not know where the road is - an animal on the sidewalk would also alert. The alert rule (0.5 animal-probability, object >= 0.5 % of the image and >= 20 % of the largest object) was set by looking at these 60 images, so these figures are optimistic.
 44. *What does the threshold slider do?* Converts the score map into a binary mask: lower = more recall, more false alarms; higher = the opposite. The default is the validation-optimal value.
 45. *Why TensorFlow/Keras and CPU?* Keras gives pre-trained MobileNetV2 and a compact training API; TensorFlow ≥ 2.11 has no native-Windows GPU support, and the dataset is small enough for CPU (≈ 25 min for all three models).
 
 **Live demo script (3 minutes)**
-1. `streamlit run app.py` → *Test an image* → choose `test_images/test_easy_peccary.jpg` (+ its mask): select **transfer**, show the clean mask; add **baseline** and **autoencoder** to show false alarms and the heat-maps.
-2. Load `test_images/test_hard_hedgehog.jpg`: show the transfer model missing most of the hedgehog; move the threshold slider to show the precision/recall trade-off.
-3. *Experiment results* tab: the comparison table and per-image F1; say that test was used once with thresholds frozen on validation.
+1. `streamlit run app.py` → upload `test_images/test_easy_peccary.jpg`: red animal alert (wild boar), annotated image, open "How the decision was made".
+2. Upload `test_images/test_hard_hedgehog.jpg`: the hard case - the pretrained pipeline raises a *false* animal alert ("sloth bear", the classifier mistakes the cardboard hedgehog for an animal) while the course CNN gives the correct "unknown obstacle" warning (sidebar → course model). Say it openly: it illustrates the limits of an ImageNet classifier.
+3. `streamlit run app_advanced.py` → *Experiment results*: the comparison table and per-image F1; say that test was used once with thresholds frozen on validation.
 
 ---
 
